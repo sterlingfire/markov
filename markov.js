@@ -6,9 +6,8 @@ class MarkovMachine {
   /** build markov machine; read in text.*/
 
   constructor(text) {
-    let words = text.split(/[ \r\n]+/);
+    let words = text.split(/[ \r\n]+/); 
     this.chains = this.makeChains(words);
-
   }
 
   /** set markov chains:
@@ -35,26 +34,37 @@ class MarkovMachine {
 
   /** return random text from chains */
 
-  getText(numWords = 100) {
+  getText(numWords=100) {
     let startIndex = Math.floor(Math.random() * Object.keys(this.chains).length)
     let words = [Object.keys(this.chains)[startIndex]];
     for (let i = 0; i < numWords; i++) {
-      // find chain of possible words
-      let chain = this.chains[words[i]];
-      console.log(chain);
       // pick one from chain
-      let nextWord = chain[Math.floor(Math.random() * chain.length)];
+      let nextWord = this._getNextWord(words[i]);
+      
       // console.log("next word:",nextWord);
       if (nextWord === null){
         break;
       }
+
       // add to words
       words.push(nextWord);
     }
-    // add words to text
     return words.join(" ");
+  }
+
+  /** Given a word return a possible word using markov chain */
+
+  _getNextWord(word) {
+    // find chain of possible words
+    let chain = this.chains[word];
+    
+    // pick one from chain
+    return chain[Math.floor(Math.random() * chain.length)];
   }
 }
 
-let mm = new MarkovMachine("the cat in the hat");
-console.log("I'm going to tell you a story: ", mm.getText())
+module.exports = { MarkovMachine };
+
+// let mm = new MarkovMachine("the cat in the hat");
+// console.log("I'm going to tell you a story: ", mm.getText());
+// console.log(mm.chains);
