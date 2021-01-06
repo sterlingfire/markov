@@ -1,4 +1,5 @@
 "use strict"
+
 /** Textual markov chain generator */
 
 
@@ -36,8 +37,13 @@ class MarkovMachine {
   /** return random text from chains */
 
   getText(numWords=100) {
-    let startIndex = Math.floor(Math.random() * Object.keys(this.chains).length)
-    let words = [Object.keys(this.chains)[startIndex]];
+    let capWords = Object.keys(this.chains).filter((word) => {
+      return word && word[0] === word[0].toUpperCase();
+    });
+
+    let startIndex = Math.floor(Math.random() * capWords.length)
+    let words = [capWords[startIndex]];
+
     for (let i = 0; i < numWords; i++) {
       // pick one from chain
       let nextWord = this._getNextWord(words[i]);
@@ -50,6 +56,11 @@ class MarkovMachine {
       // add to words
       words.push(nextWord);
     }
+
+    while(!words[words.length - 1].endsWith(".")){
+      words.pop();
+    }
+
     return words.join(" ");
   }
 

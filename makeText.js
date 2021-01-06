@@ -1,3 +1,5 @@
+"use strict";
+
 const axios = require('axios');
 const fsP = require('fs/promises');
 const { MarkovMachine } = require('./markov');
