@@ -1,3 +1,4 @@
+"use strict"
 const { MarkovMachine } = require("./markov");
 
 
@@ -45,14 +46,15 @@ describe("MarkovMachine", function () {
 
   test("Check that a sample text is returned", function () {
     let mmWords = mm.getText().split(" ");
-
+    // check pairs are valid chains
     for (let i = 0; i < mmWords.length - 1; i++) {
       expect(mm.chains[mmWords[i]]).toContain(mmWords[i + 1]);
     }
     expect(mm.chains[mmWords[mmWords.length - 1]]).toContain(null);
-
+  })
+    test("Check that a sample text is returned (example2)", function () {
     let mm2Words = mm2.getText().split(" ");
-
+    // check pairs are valid chains
     for (let i = 0; i < mm2Words.length - 1; i++) {
       expect(mm2.chains[mm2Words[i]]).toContain(mm2Words[i + 1]);
     }

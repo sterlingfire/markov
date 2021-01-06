@@ -27,7 +27,9 @@ async function getTextFromSource(){
     text = await webCat(url);
   }
   else {
-    console.error("Bad input. Please try again.");
+    console.error(`Bad input. Please try again.
+    * Example: $ node makeText.js file eggs.txt
+    * Example2: $ node makeText.js url http://www.gutenberg.org/files/11/11-0.txt`);
     process.exit(1);
   }
   return text;

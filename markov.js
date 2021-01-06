@@ -1,3 +1,4 @@
+"use strict"
 /** Textual markov chain generator */
 
 
@@ -6,7 +7,7 @@ class MarkovMachine {
   /** build markov machine; read in text.*/
 
   constructor(text) {
-    let words = text.split(/[ \r\n]+/); 
+    let words = text.split(/[ \r\n]+/);
     this.chains = this.makeChains(words);
   }
 
@@ -40,7 +41,7 @@ class MarkovMachine {
     for (let i = 0; i < numWords; i++) {
       // pick one from chain
       let nextWord = this._getNextWord(words[i]);
-      
+
       // console.log("next word:",nextWord);
       if (nextWord === null){
         break;
@@ -57,7 +58,7 @@ class MarkovMachine {
   _getNextWord(word) {
     // find chain of possible words
     let chain = this.chains[word];
-    
+
     // pick one from chain
     return chain[Math.floor(Math.random() * chain.length)];
   }
