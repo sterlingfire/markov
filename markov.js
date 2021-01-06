@@ -37,6 +37,10 @@ class MarkovMachine {
   /** return random text from chains */
 
   getText(numWords=100) {
+    // Find all the capital words 
+    // To start on words that begin the sentence
+    // - Split on ".", grab all the first words, make 
+    //   sure to start on one of these words
     let capWords = Object.keys(this.chains).filter((word) => {
       return word && word[0] === word[0].toUpperCase();
     });
@@ -75,7 +79,64 @@ class MarkovMachine {
   }
 }
 
-module.exports = { MarkovMachine };
+
+class BiGramMarkovMachine extends MarkovMachine {
+  
+  /** set bigram markov chains:
+   *
+   *  for text of "the cat in the hat", chains will be
+   *  {"the cat": ["in"], "cat in": ["the"], "in the": ["hat"], "the hat": [null]} */
+
+  makeChains(words) {
+    let chains = {};
+
+    for (let i = 0; i < words.length - 1; i++) {
+      let currentPhrase = words[i] + " " + words[i + 1];
+      let nextWord = words[i + 2] || null;
+
+      if (chains[currentPhrase]) {
+        chains[currentPhrase].push(nextWord);
+      }
+      else {
+        chains[currentPhrase] = [nextWord];
+      }
+    }
+    return chains;
+  }
+
+  getText(numWords=100) {
+    // Find all the bigram phrases that begin with
+    // a capital letter
+    let capWords = Object.keys(this.chains).filter((word) => {
+      return word && word[0] === word[0].toUpperCase();
+    });
+
+    let startIndex = Math.floor(Math.random() * capWords.length)
+    let words = [...capWords[startIndex].split(" ")];
+
+    for (let i = 1; i < numWords; i++) {
+      // pick one from chain
+      let nextWord = this._getNextWord(words[i - 1] + " " + words[i]);
+
+      // console.log("next word:",nextWord);
+      if (nextWord === null){
+        break;
+      }
+
+      // add to words
+      words.push(nextWord);
+    }
+
+    // Remove the words that do not finish the sentence
+    while(!words[words.length - 1].endsWith(".")){
+      words.pop();
+    }
+
+    return words.join(" ");
+  }
+}
+
+module.exports = { BiGramMarkovMachine };
 
 // let mm = new MarkovMachine("the cat in the hat");
 // console.log("I'm going to tell you a story: ", mm.getText());

@@ -2,7 +2,7 @@
 
 const axios = require('axios');
 const fsP = require('fs/promises');
-const { MarkovMachine } = require('./markov');
+const { BiGramMarkovMachine } = require('./markov');
 const encoding = "utf8";
 
 /** Command-line tool to generate Markov text.
@@ -11,7 +11,7 @@ const encoding = "utf8";
  */
 async function main() {
   let text = await getTextFromSource();
-  let mm = new MarkovMachine(text);
+  let mm = new BiGramMarkovMachine(text);
   console.log(mm.getText());
 }
 
